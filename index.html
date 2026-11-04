@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Bundaran ITS WebGL</title>
+    <meta name="description" content="Visualisasi 3D Bundaran ITS Surabaya dengan WebGL2 murni." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <!-- ============ HEADER: judul & anggota kelompok ============ -->
+    <header class="hero">
+      <div class="wrap hero__inner">
+        <p class="eyebrow">Proyek WebGL · Sukolilo, Surabaya</p>
+        <h1>Bundaran ITS dalam 3D</h1>
+        <p class="lede">
+          Model 3D Bundaran Institut Teknologi Sepuluh Nopember yang digambar dengan WebGL2 murni,
+          tanpa library 3D. Kamera mengorbit 360°, ada mode pagi dan malam, air mancur dengan lampu
+          warna-warni, dan mobil yang berputar mengelilingi bundaran.
+        </p>
+
+        <section class="team" aria-labelledby="team-title">
+          <h2 id="team-title" class="team__title">Anggota kelompok</h2>
+          <ol class="team__list">
+            <li class="member">
+              <span class="member__no">1</span>
+              <span class="member__name">Naura Taqiyya Mazi</span>
+              <span class="member__nrp">NRP 5025241119</span>
+            </li>
+            <li class="member">
+              <span class="member__no">2</span>
+              <span class="member__name">Riyannizaar Dwi Amarullah</span>
+              <span class="member__nrp">NRP 5025241121</span>
+            </li>
+          </ol>
+        </section>
+
+        <nav class="toc" aria-label="Daftar isi">
+          <a href="#perbandingan">Perbandingan</a>
+          <a href="#video">Video asli</a>
+          <a href="#struktur">Struktur objek</a>
+          <a href="#tugas">Pembagian tugas</a>
+          <a href="#sumber">Sumber</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- ============ PERBANDINGAN: foto asli vs kanvas WebGL ============ -->
+      <section id="perbandingan" class="section">
+        <div class="wrap">
+          <h2>Foto asli vs model WebGL</h2>
+          <p class="section__intro">
+            Kiri adalah foto drone Bundaran ITS, kanan adalah model 3D yang berjalan langsung di
+            browser. Tekan <strong>Sudut foto asli</strong> untuk memindahkan kamera ke sudut yang
+            mirip dengan foto.
+          </p>
+
+          <div class="compare">
+            <figure class="compare__item">
+              <div class="compare__media">
+                <img
+                  src="img/bundaran-its-asli.jpg"
+                  alt="Foto drone Bundaran ITS: air mancur warna-warni di tengah taman berpola bunga, dikelilingi jalan berpola dan tulisan Institut Teknologi Sepuluh Nopember"
+                  width="2560"
+                  height="1440"
+                />
+              </div>
+              <figcaption>
+                <span class="tag">Asli</span>
+                Foto drone Bundaran ITS. Resolusi ditingkatkan 2× (1280×720 → 2560×1440) lalu
+                dipertajam.
+                <a href="img/bundaran-its-asli.jpg" target="_blank" rel="noopener"
+                  >Buka ukuran penuh</a
+                >
+              </figcaption>
+            </figure>
+
+            <figure class="compare__item">
+              <div id="viewer" class="viewer">
+                <canvas
+                  id="stage"
+                  aria-label="Model 3D Bundaran ITS, bisa diputar dengan mouse atau sentuhan"
+                ></canvas>
+                <div id="loading" class="viewer__loading">Membangun bundaran…</div>
+                <p class="viewer__hint">Seret untuk memutar · scroll / cubit untuk zoom</p>
+              </div>
+              <figcaption>
+                <span class="tag tag--model">Model</span>
+                Render WebGL2 secara langsung. Tekan tombol <kbd>N</kbd> untuk berganti pagi/malam.
+              </figcaption>
+            </figure>
+          </div>
+
+          <!-- tombol kontrol scene -->
+          <div class="controls" role="toolbar" aria-label="Kontrol scene">
+            <div class="seg" role="group" aria-label="Waktu">
+              <button id="btnDay" type="button" aria-pressed="true">Pagi</button>
+              <button id="btnNight" type="button" aria-pressed="false">Malam</button>
+            </div>
+            <button id="btnOrbit" type="button" class="btn" aria-pressed="true">
+              Orbit 360° aktif
+            </button>
+            <button id="btnFountain" type="button" class="btn" aria-pressed="true">
+              Air mancur
+            </button>
+            <button id="btnPhoto" type="button" class="btn">Sudut foto asli</button>
+            <button id="btnReset" type="button" class="btn">Reset kamera</button>
+            <button id="btnFull" type="button" class="btn">Layar penuh</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ VIDEO ASLI (YouTube, embed) ============ -->
+      <section id="video" class="section section--tint">
+        <div class="wrap">
+          <h2>Video objek asli</h2>
+          <p class="section__intro">Rekaman drone Bundaran ITS Surabaya dari YouTube.</p>
+          <div class="video">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/XT8KJaYasoo"
+              title="Bundaran Institut Teknologi Sepuluh Nopember Surabaya | Drone"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+          <p class="note">
+            Video tidak muncul?
+            <a href="https://youtu.be/XT8KJaYasoo" target="_blank" rel="noopener">Buka di YouTube</a
+            >. YouTube kadang menolak pemutaran dari file yang dibuka langsung
+            (<code>file://</code>); jalankan lewat server lokal seperti dijelaskan di README.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============ STRUKTUR OBJEK (pohon hierarki / clustering) ============ -->
+      <section id="struktur" class="section">
+        <div class="wrap">
+          <h2>Struktur hubungan antar objek</h2>
+          <p class="section__intro">
+            Objek dikelompokkan bertingkat seperti hierarchical clustering: objek yang berdekatan
+            dan saling bergantung disatukan dalam satu klaster. Dalam kode, setiap klaster adalah
+            <code>Group</code> induk, sehingga anak-anaknya ikut bergerak ketika induknya
+            dipindahkan.
+          </p>
+
+          <ul class="legend" aria-label="Keterangan tingkat">
+            <li><span class="dot dot--0"></span>Tingkat 0 · scene</li>
+            <li><span class="dot dot--1"></span>Tingkat 1 · klaster</li>
+            <li><span class="dot dot--2"></span>Tingkat 2 · objek</li>
+            <li><span class="dot dot--3"></span>Tingkat 3 · komponen</li>
+          </ul>
+
+          <div class="tree-scroll">
+            <ul class="tree">
+              <li>
+                <span class="node node--0">Scene Bundaran ITS</span>
+                <ul>
+                  <li>
+                    <span class="node node--1">Lingkungan</span>
+                    <ul>
+                      <li>
+                        <span class="node node--2">Langit</span>
+                        <ul>
+                          <li><span class="node node--3">Kubah gradien (shader)</span></li>
+                          <li><span class="node node--3">Awan ×14 (sprite)</span></li>
+                          <li><span class="node node--3">Bintang ×1400 &amp; bulan</span></li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="node node--2">Pencahayaan</span>
+                        <ul>
+                          <li><span class="node node--3">Cahaya langit-tanah</span></li>
+                          <li><span class="node node--3">Matahari + shadow map</span></li>
+                          <li><span class="node node--3">Cahaya bulan</span></li>
+                          <li><span class="node node--3">Lampu titik plaza ×4</span></li>
+                        </ul>
+                      </li>
+                      <li><span class="node node--2">Tanah rumput</span></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span class="node node--1">Bundaran</span>
+                    <ul>
+                      <li>
+                        <span class="node node--2">Plaza</span>
+                        <ul>
+                          <li><span class="node node--3">Jalan berpola segitiga</span></li>
+                          <li><span class="node node--3">Pita merah &amp; marka putih</span></li>
+                          <li><span class="node node--3">Trotoar abu-abu</span></li>
+                          <li><span class="node node--3">Jalan masuk ×3</span></li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="node node--2">Pulau tengah</span>
+                        <ul>
+                          <li>
+                            <span class="node node--3">Kanstin kuning-hitam &amp; pagar</span>
+                          </li>
+                          <li><span class="node node--3">Taman pola bunga</span></li>
+                          <li><span class="node node--3">Pohon ×5</span></li>
+                          <li>
+                            <span class="node node--3"
+                              >Air mancur: kolam, cincin hijau, LED ×92, partikel ±5.000, lampu
+                              warna ×4</span
+                            >
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="node node--2">Lampu jalan</span>
+                        <ul>
+                          <li>
+                            <span class="node node--3"
+                              >Tiang, lengan, kepala lampu, cahaya di jalan</span
+                            >
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span class="node node--1">Tulisan ITS</span>
+                    <ul>
+                      <li><span class="node node--2">Huruf 3D melengkung ×31</span></li>
+                      <li><span class="node node--2">Alas &amp; strip lampu sorot</span></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span class="node node--1">Gate kanopi</span>
+                    <ul>
+                      <li>
+                        <span class="node node--2">Tiang ×11</span>
+                        <ul>
+                          <li><span class="node node--3">Badan tiang</span></li>
+                          <li><span class="node node--3">Relief roda gigi ×9 per tiang</span></li>
+                        </ul>
+                      </li>
+                      <li><span class="node node--2">Atap melengkung &amp; trim oranye</span></li>
+                      <li><span class="node node--2">Tulisan di atas atap &amp; rel</span></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span class="node node--1">Gerbang ITS</span>
+                    <ul>
+                      <li><span class="node node--2">Menara kisi-kisi ×6</span></li>
+                      <li>
+                        <span class="node node--2">Monumen lambang</span>
+                        <ul>
+                          <li><span class="node node--3">Dasar batu &amp; jendela bulat</span></li>
+                          <li>
+                            <span class="node node--3"
+                              >Emblem: roda gigi, inti emas, cincin orbit</span
+                            >
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="node node--2">Pulau median</span>
+                        <ul>
+                          <li><span class="node node--3">Topiari &amp; kanstin</span></li>
+                          <li><span class="node node--3">Bendera ASEAN ×11</span></li>
+                          <li><span class="node node--3">Palem ×4</span></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span class="node node--1">Kendaraan ×13</span>
+                    <ul>
+                      <li>
+                        <span class="node node--2">Satu mobil</span>
+                        <ul>
+                          <li><span class="node node--3">Bodi, kabin, atap, roda ×4</span></li>
+                          <li>
+                            <span class="node node--3">Lampu depan, lampu belakang, sorot</span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li><span class="node node--1">Pohon luar ×7</span></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PEMBAGIAN TUGAS ============ -->
+      <section id="tugas" class="section section--tint">
+        <div class="wrap">
+          <h2>Pembagian tugas</h2>
+          <p class="section__intro">
+            Tugas dibagi per bagian sistem supaya masing-masing anggota memegang bagian kode yang
+            utuh, lalu digabung dan diuji bersama.
+          </p>
+
+                    <div class="tasks">
+            <article class="task-card">
+              <header>
+                <h3>Naura Taqiyya Mazi</h3>
+                <p class="task-card__nrp">NRP 5025241119</p>
+                <p class="task-card__role">Visual, tekstur, dan halaman</p>
+              </header>
+              <h4>Teknis</h4>
+              <ul>
+                <li>Melukis tekstur <b>jalan</b>, trotoar, dan <b>taman</b> pola bunga dengan Canvas 2D.</li>
+                <li>Membuat efek <b>air mancur</b>: partikel di shader, LED, dan lampu warna-warni.</li>
+                <li>Membuat 11 gambar <b>bendera</b> ASEAN dengan Canvas 2D.</li>
+                <li>Membuat sketsa tata letak bundaran: jari-jari jalan, trotoar, dan jalan masuk.</li>
+                <li>Menentukan palet warna dan suasana siang serta malam.</li>
+              </ul>
+              <p class="task-card__files">
+                File utama: <code>scene.js</code> (bagian plaza, taman, air mancur, tulisan),
+                <code>flags.js</code>, <code>index.html</code>, <code>style.css</code>
+              </p>
+            </article>
+
+            <article class="task-card">
+              <header>
+                <h3>Riyannizaar Dwi Amarullah</h3>
+                <p class="task-card__nrp">NRP 5025241121</p>
+                <p class="task-card__role">Mesin WebGL dan logika scene</p>
+              </header>
+              <ul>
+                <li>Menulis mesin GL3D: matriks, kamera, scene graph, dan geometri dasar.</li>
+                <li>Menulis shader pencahayaan, bayangan, bloom, dan tone mapping.</li>
+                <li>Membuat <b>kamera</b> orbit 360° dan animasi <b>mobil</b> mengitari bundaran.</li>
+                <li>Memodelkan <b>gate</b> dan <b>monumen</b>: extrude roda gigi, atap, dan tiang bergerigi.</li>
+                <li>
+                  Merevisi tata letak <b>jalan masuk</b> dan <b>sudut kamera foto asli</b> agar sesuai
+                  foto referensi: jalan entrance bendera tetap, dua jalan bawah digabung menjadi satu,
+                  dan posisi kamera tombol <i>Sudut foto asli</i> disesuaikan.
+                </li>
+              </ul>
+              <p class="task-card__files">
+                File utama: <code>engine.js</code>, <code>main.js</code>,
+                <code>scene.js</code> (bagian gate, gerbang, mobil, lampu)
+              </p>
+            </article>
+          </div>
+
+          <div class="shared">
+            <h3>Dikerjakan bersama</h3>
+            <ul>
+              <li>Membuat halaman HTML/CSS dan kanvas perbandingan dengan foto asli.</li>
+              <li>Mengumpulkan referensi: foto drone, video, Street View gerbang dan bendera.</li>
+              <li>Menggabungkan kode</li>
+            </ul>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- ============ SUMBER ============ -->
+      <section id="sumber" class="section">
+        <div class="wrap">
+          <h2>Sumber</h2>
+          <ol class="sources">
+            <li>
+              Foto drone Bundaran ITS (thumbnail YouTube):
+              <a
+                href="https://i.ytimg.com/vi/3A6f50Z2EI8/maxresdefault.jpg"
+                target="_blank"
+                rel="noopener"
+                >i.ytimg.com/vi/3A6f50Z2EI8/maxresdefault.jpg</a
+              >
+            </li>
+            <li>
+              Video “Bundaran Institut Teknologi Sepuluh Nopember Surabaya | Drone”:
+              <a href="https://youtu.be/XT8KJaYasoo" target="_blank" rel="noopener"
+                >youtu.be/XT8KJaYasoo</a
+              >
+            </li>
+            <li>
+              Lokasi Bundaran ITS di Google Maps:
+              <a href="https://maps.app.goo.gl/MNfhDyH7acPL3Bpa8" target="_blank" rel="noopener"
+                >maps.app.goo.gl/MNfhDyH7acPL3Bpa8</a
+              >
+            </li>
+            <li>
+              Google Maps Street View: tangkapan layar gerbang ITS, tiang gate bergerigi, dan
+              susunan bendera ASEAN (referensi visual).
+            </li>
+            <li>
+              Spesifikasi WebGL 2.0, Khronos Group:
+              <a
+                href="https://registry.khronos.org/webgl/specs/latest/2.0/"
+                target="_blank"
+                rel="noopener"
+                >registry.khronos.org/webgl/specs/latest/2.0</a
+              >
+            </li>
+            <li>
+              Dokumentasi WebGL2RenderingContext, MDN Web Docs:
+              <a
+                href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext"
+                target="_blank"
+                rel="noopener"
+                >developer.mozilla.org</a
+              >
+            </li>
+            <li>
+              Rumus shading GGX dan tone mapping ACES Filmic mengikuti implementasi three.js
+              (lisensi MIT) sebagai acuan:
+              <a href="https://github.com/mrdoob/three.js" target="_blank" rel="noopener"
+                >github.com/mrdoob/three.js</a
+              >
+            </li>
+            <li>
+              Font Oswald dan Plus Jakarta Sans:
+              <a href="https://fonts.google.com" target="_blank" rel="noopener">Google Fonts</a>
+            </li>
+            <li>
+              Bendera 10 negara ASEAN dan bendera ASEAN digambar ulang secara sederhana dari desain
+              resmi masing-masing.
+            </li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        Bundaran ITS WebGL · Naura Taqiyya Mazi &amp; Riyannizaar Dwi Amarullah
+      </div>
+    </footer>
+
+    <!-- urutan skrip penting: mesin -> data bendera -> scene -> main -->
+    <script src="js/engine.js"></script>
+    <script src="js/flags.js"></script>
+    <script src="js/scene.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

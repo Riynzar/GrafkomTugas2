@@ -1,0 +1,565 @@
+/*
+ * style.css — tampilan halaman Bundaran ITS WebGL
+ * Tata letak: header biru tua (judul + anggota), lalu bagian-bagian berselang
+ * warna latar; perbandingan foto & kanvas dalam dua kolom yang menumpuk di HP.
+ * Warna diambil dari objeknya: biru tua ITS, kuning kanstin, merah pita jalan.
+ */
+
+/* ---------- token warna & huruf (tema terang) ---------- */
+:root {
+  --bg: #f5f6f3;
+  --bg-tint: #e9ecef;
+  --surface: #ffffff;
+  --ink: #17202e;
+  --ink-soft: #4b5565;
+  --line: #d4d8de;
+  --navy: #0d2a5c;
+  --navy-ink: #f4f6fb;
+  --gold: #f2c418;
+  --gold-ink: #241b00;
+  --brick: #b24a4c;
+  --leaf: #3f7a2c;
+  --display: "Oswald", "Arial Narrow", Impact, sans-serif;
+  --body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius: 12px;
+  color-scheme: light;
+}
+
+/* ---------- tema gelap ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f141c;
+    --bg-tint: #151c27;
+    --surface: #1a2230;
+    --ink: #e8ecf2;
+    --ink-soft: #a7b1c0;
+    --line: #2c3646;
+    --navy: #0a1d40;
+    --navy-ink: #f4f6fb;
+    --gold: #f2c418;
+    --gold-ink: #241b00;
+    --brick: #d06a6c;
+    --leaf: #7fbf62;
+    color-scheme: dark;
+  }
+}
+
+/* ---------- dasar ---------- */
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.6 var(--body);
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+code,
+kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  background: var(--bg-tint);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0.05em 0.35em;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
+  margin: 0;
+}
+h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  text-transform: uppercase;
+}
+h3 {
+  font-size: 1.25rem;
+}
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* ---------- header ---------- */
+.hero {
+  background: var(--navy);
+  color: var(--navy-ink);
+  border-bottom: 6px solid var(--gold);
+  /* garis kuning-hitam seperti kanstin bundaran */
+  box-shadow: 0 6px 0 0 #1c1c1c;
+  margin-bottom: 6px;
+}
+.hero__inner {
+  padding-block: 48px 28px;
+  display: grid;
+  gap: 18px;
+}
+.eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+}
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  text-transform: uppercase;
+}
+.lede {
+  margin: 0;
+  max-width: 65ch;
+  color: #c9d3e6;
+}
+.team {
+  display: grid;
+  gap: 10px;
+}
+.team__title {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-family: var(--body);
+  color: #c9d3e6;
+}
+.team__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.member {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius);
+  padding: 10px 16px 10px 10px;
+  min-width: 0;
+}
+.member__no {
+  grid-row: span 2;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--gold);
+  color: var(--gold-ink);
+  font-weight: 700;
+}
+.member__name {
+  font-weight: 700;
+}
+.member__nrp {
+  font-size: 0.85rem;
+  color: #c9d3e6;
+  font-variant-numeric: tabular-nums;
+}
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.92rem;
+}
+.toc a {
+  color: var(--navy-ink);
+  text-decoration: none;
+  opacity: 0.85;
+}
+.toc a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* ---------- bagian umum ---------- */
+.section {
+  padding-block: 56px;
+}
+.section--tint {
+  background: var(--bg-tint);
+}
+.section__intro {
+  max-width: 70ch;
+  color: var(--ink-soft);
+  margin: 10px 0 24px;
+}
+.note {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+/* ---------- perbandingan foto & kanvas ---------- */
+.compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.compare__item {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.compare__media,
+.viewer {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #0b1730;
+  border: 1px solid var(--line);
+}
+.compare__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+figcaption {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.tag {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-right: 6px;
+  background: var(--brick);
+  color: #fff;
+}
+.tag--model {
+  background: var(--navy);
+}
+
+/* bingkai kanvas WebGL */
+.viewer {
+  position: relative;
+}
+.viewer canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+.viewer canvas:active {
+  cursor: grabbing;
+}
+.viewer:fullscreen {
+  aspect-ratio: auto;
+  border-radius: 0;
+  border: 0;
+}
+.viewer__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #0b1730;
+  color: #f4f6fb;
+  font-family: var(--display);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 16px;
+  transition: opacity 0.6s;
+}
+.viewer__loading.is-done {
+  opacity: 0;
+  pointer-events: none;
+}
+.viewer__hint {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  margin: 0;
+  font-size: 0.75rem;
+  color: #e6ebf3;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+/* tombol kontrol */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 18px;
+  padding: 10px;
+  border-radius: var(--radius);
+  background: var(--navy);
+}
+.seg {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.controls button {
+  font: 600 0.88rem/1 var(--body);
+  color: var(--navy-ink);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+.controls .btn {
+  background: rgba(255, 255, 255, 0.1);
+}
+.controls button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.controls button[aria-pressed="true"] {
+  background: var(--gold);
+  color: var(--gold-ink);
+}
+.controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- video ---------- */
+.video {
+  aspect-ratio: 16 / 9;
+  max-width: 960px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+}
+.video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* ---------- pohon struktur objek ---------- */
+.legend {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: -1px;
+}
+.dot--0,
+.node--0 {
+  background: var(--navy);
+  color: var(--navy-ink);
+}
+.dot--1,
+.node--1 {
+  background: var(--gold);
+  color: var(--gold-ink);
+}
+.dot--2 {
+  background: var(--surface);
+  border: 2px solid var(--leaf);
+}
+.dot--3 {
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.tree-scroll {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.tree,
+.tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tree ul {
+  margin-left: 22px;
+  padding-left: 18px;
+  border-left: 2px solid var(--line);
+}
+.tree li {
+  position: relative;
+  padding: 5px 0;
+}
+/* garis cabang horizontal dari induk ke simpul anak */
+.tree ul > li::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 19px;
+  width: 16px;
+  border-top: 2px solid var(--line);
+}
+/* potong garis vertikal setelah anak terakhir */
+.tree ul > li:last-child::after {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 20px;
+  bottom: 0;
+  width: 2px;
+  background: var(--bg);
+}
+.node {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.node--0 {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.node--1 {
+  font-weight: 700;
+}
+.node--2 {
+  background: var(--surface);
+  border: 2px solid var(--leaf);
+  font-weight: 600;
+}
+.node--3 {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+/* ---------- pembagian tugas ---------- */
+.tasks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.task-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 5px solid var(--navy);
+  border-radius: var(--radius);
+  padding: 22px;
+  min-width: 0;
+}
+.task-card + .task-card {
+  border-top-color: var(--brick);
+}
+.task-card header {
+  margin-bottom: 12px;
+}
+.task-card__nrp {
+  margin: 2px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+.task-card__role {
+  margin: 8px 0 0;
+  font-weight: 700;
+}
+.task-card ul {
+  margin: 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 6px;
+}
+.task-card__files {
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+.shared {
+  margin-top: 20px;
+  padding: 18px 22px;
+  border-radius: var(--radius);
+  border: 1px dashed var(--line);
+  background: var(--surface);
+}
+.shared p {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  max-width: 75ch;
+}
+
+/* ---------- sumber & footer ---------- */
+.sources {
+  margin: 18px 0 0;
+  padding-left: 1.4em;
+  display: grid;
+  gap: 8px;
+  max-width: 85ch;
+}
+.sources a {
+  word-break: break-word;
+}
+.footer {
+  background: var(--navy);
+  color: #c9d3e6;
+  font-size: 0.88rem;
+  padding-block: 22px;
+}
+
+/* ---------- layar kecil: kolom menumpuk ---------- */
+@media (max-width: 860px) {
+  .compare,
+  .tasks {
+    grid-template-columns: 1fr;
+  }
+  .viewer__hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
